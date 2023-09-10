@@ -3,6 +3,8 @@ package com.example.animationfirst
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -24,23 +26,23 @@ class MainActivity : AppCompatActivity() {
         star = findViewById(R.id.main_iv_star)
 
         binding?.mainBtnRotate?.setOnClickListener {
-            rotate_fun()
+            rotating()
         }
         //
         binding?.mainBtnTranslate?.setOnClickListener {
-            move_fun()
+            moving()
         }
         //
         binding?.mainBtnScale?.setOnClickListener {
-
+            sizing()
         }
         //
         binding?.mainBtnFade?.setOnClickListener {
-
+            fading()
         }
         //
         binding?.mainBtnColorize?.setOnClickListener {
-
+            coloring()
         }
         //
         binding?.mainBtnShower?.setOnClickListener {
@@ -67,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun rotate_fun() {
+    private fun rotating() {
 
          val startAnimator : ObjectAnimator = ObjectAnimator.ofFloat(binding?.mainIvStar, View.ROTATION_Y, -360F, 0F)
         startAnimator.duration = 5000;
@@ -76,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         startAnimator.start()
     }
 
-    private fun move_fun() {
+    private fun moving() {
         val startAnimator : ObjectAnimator = ObjectAnimator.ofFloat(binding?.mainIvStar, View.TRANSLATION_X, 300F)
         startAnimator.repeatCount = 31
         startAnimator.repeatMode = ObjectAnimator.REVERSE
@@ -85,7 +87,47 @@ class MainActivity : AppCompatActivity() {
         startAnimator.start()
     }
 
-    override fun onDestroy() {
+    private fun sizing() {
+        val scaleX = PropertyValuesHolder.ofFloat(View.SCALE_X, 4f)
+        val scaleY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 4f)
+
+        val startAnimator : ObjectAnimator = ObjectAnimator.ofPropertyValuesHolder(binding?.mainIvStar, scaleX, scaleY)
+
+        startAnimator.repeatCount = 1
+        startAnimator.repeatMode = ObjectAnimator.REVERSE
+        binding?.mainBtnScale?.let { startAnimator.disableBtnViewDuringAnimation(it) }
+
+        startAnimator.start()
+
+    }
+
+    private fun fading() {
+        val startAnimator = ObjectAnimator.ofFloat(binding?.mainIvStar, View.ALPHA, 0f)
+        startAnimator.repeatCount = 15
+        startAnimator.repeatMode = ObjectAnimator.REVERSE
+
+        binding?.mainBtnFade?.let { startAnimator.disableBtnViewDuringAnimation(it) }
+
+        startAnimator.start()
+    }
+
+    private fun coloring() {
+        // var startAnimator = ObjectAnimator.ofInt(binding?.mainIvStar?.parent,"backgroundColor", Color.BLACK, Color.RED).start()
+
+        var startAnimator = ObjectAnimator.ofArgb(binding?.mainIvStar?.parent,
+            "backgroundColor", Color.BLACK, Color.RED)
+        startAnimator.setDuration(500)
+        startAnimator.repeatCount = 1
+        startAnimator.repeatMode = ObjectAnimator.REVERSE
+
+        binding?.mainBtnColorize?.let { startAnimator.disableBtnViewDuringAnimation(it) }
+
+        startAnimator.start()
+
+    }
+
+
+        override fun onDestroy() {
         super.onDestroy()
 
     }
